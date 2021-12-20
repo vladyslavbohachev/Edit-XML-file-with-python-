@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #Intersnack Aufgaben import anpassung
 
 Set the directories\
@@ -40,9 +41,6 @@ As one of the last things we do, is the clear out the xml, here we remove all gi
 And the last, but not list thing that we do in our code, we move the modified data to our import folder.\
 
 .... AND thats all Folks ....
-
-
-
 
 
 
