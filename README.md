@@ -43,12 +43,12 @@ Function Clear data - will move everything what we don't need to the specified f
 def configure():
     for root, directories, filenames in os.walk(rootdir):
 ```
-Function *Configure* - is the main part of the code, we start here with the looping throu the whole directory.\
+Function *Configure* - is the main part of the code, we start here with the looping throu the whole directory.
 ```python
 for filename in filenames:
 	if filename.endswith('.xml'):
 ```
-Here we select all files in the directory that match the criteria end with ".xml"\
+Here we select all files in the directory that match the criteria end with ".xml"
 ```python
 tree = ET.parse(os.path.join(rootdir,filename))
 	root = tree.getroot()
@@ -91,7 +91,7 @@ info = []
 		split = j.text.split('fp')[0].split('Stellplätze: ')[1]
 		info.append(split)
 ```
-Here we split the data that we need for our fields in this case that are the number of pallets that have been separated \
+Here we split the data that we need for our fields in this case that are the number of pallets that have been separated
 from the info text.
 ```python
 for i in root.findall('NK/AK/SD/FD/METER1'):
@@ -103,8 +103,8 @@ for i in root.findall('NK/AK/SD/FD/METER1'):
 			test[counter].text = str(info[counter])
 			tree.write(os.path.join(rootdir, filename))
 ```
-Now we apply the data from Meter1 that are our pallets to our field Meter1 (the field Meter1 have an generated id, becase \
-there can be more than 1 field for editing and also it can be more fields with our values.)\
+Now we apply the data from Meter1 that are our pallets to our field Meter1 (the field Meter1 have an generated id, because
+there can be more than 1 field for editing and also it can be more fields with our values.)
 ```python
 EXTNR_1 = []
 	for d in root.findall('NK/AK/SD/EXTNR'):
