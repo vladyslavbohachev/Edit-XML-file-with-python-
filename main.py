@@ -1,5 +1,6 @@
 #!/usr/bin/python
-import datetime, os
+import datetime
+import os
 import shutil
 import xml.etree.ElementTree as ET
 
@@ -11,10 +12,13 @@ cancelledDir = r'X:/cancelled'
 acceptedDir = r'X:/BackupRAW'
 dailyBackupDir = 'X:/BackupRAW/' + str(datetime.date.today())
 
+
 def check_dir():
     directoryList = [importdir, modifiedDir, cancelledDir, acceptedDir, dailyBackupDir]
     for items in directoryList:
         os.makedirs(items, exist_ok=True)
+
+
 def clear_data():
     for filename in [filename for filename in os.listdir(rootdir) if filename.__contains__(str('modified'))]:
         shutil.move(os.path.join(rootdir, filename), modifiedDir)
@@ -22,10 +26,12 @@ def clear_data():
         shutil.move(os.path.join(rootdir, filename), cancelledDir)
     for filename in [filename for filename in os.listdir(rootdir) if filename.__contains__(str('accepted'))]:
         shutil.copy(os.path.join(rootdir, filename), dailyBackupDir)
+
+
 def setup():
     for root, dirs, files in os.walk(rootdir):
-        print('root:', root, 'dirs:', dirs, 'files:', files)
-        if(rootdir == None):
+        if rootdir == None:
+            print('there are no files to transmit')
             exit(0)
         else:
             for filename in files:
@@ -35,26 +41,21 @@ def setup():
                     getExternnumber = []
                     for getExternnumberToText in root.findall('NK/AK/SD/EXTNR'):
                         getExternnumber.append(getExternnumberToText.text)
-                        if str(getExternnumber).startswith('010') or \
-                                str(getExternnumber).__contains__('0104') or \
-                                str(getExternnumber).__contains__('0105'):
+                        if str(getExternnumber).startswith('010'):
                             continue
                         else:
-                            #Set ID's to relevant datasets
                             rootList = ['NK/AK/SD/FD/METER1', 'NK/AK/SD/EXTNR', 'NK/AK/SD/EXTTANR']
                             setIDList = ['setStellplaetzeID', 'setExternemummerID', 'setExternetransportnummerID']
                             idList = ['SID', 'EID', 'ENID']
-                            id = ['sid', 'eid', 'enid']
+                            rootid = ['sid', 'eid', 'enid']
                             for i in range(len(rootList)):
-                                for (id[i], setIDList[i]) in enumerate(root.findall(rootList[i])):
-                                    setIDList[i].set(idList[i],str(id[i]))
+                                for (rootid[i], setIDList[i]) in enumerate(root.findall(rootList[i])):
+                                    setIDList[i].set(idList[i], str(rootid[i]))
                                 tree.write(os.path.join(rootdir, filename))
-
                             for eml in root.findall('NK/AK/SD/EXTTANR'):
                                 newval = ET.SubElement(eml, None)
                                 newval.text = ''
                             tree.write(os.path.join(rootdir, filename))
-                            # Splits
                             SplitStellplaetze = []
                             SplitTransportnummer = []
                             for splitcounter in root.findall('NK/AK/SD/INFO/ABSINFO1'):
@@ -62,14 +63,12 @@ def setup():
                                 splittwo = splitcounter.text.split('Transportnummer: ')[1].split('\\nSAP')[0]
                                 SplitStellplaetze.append(splitone)
                                 SplitTransportnummer.append(splittwo)
-                            # Get Data
                             getExternemummerData = []
                             for i in root.findall('NK/AK/SD/EXTNR'):
                                 getExternemummerData.append(i.text)
                             getExternetransportnummerData = []
                             for j in root.findall('NK/AK/SD/EXTTANR'):
                                 getExternetransportnummerData.append(j)
-                            # Get Data from ID's
                             getStellplaetzeID = tree.findall('NK/AK/SD/FD/METER1[@SID]')
                             getExternetransportnummerID = tree.findall('NK/AK/SD/EXTTANR[@ENID]')
                             getExternemummerID = tree.findall('NK/AK/SD/EXTNR[@EID]')
@@ -85,9 +84,8 @@ def setup():
                                 for id in root.findall(rootList[i]):
                                     del (id.attrib[idList[i]])
                                 tree.write(os.path.join(rootdir, filename))
-
             for filename in [filename for filename in os.listdir(rootdir) if filename.__contains__(str('accepted'))]:
-                shutil.move(os.path.join(rootdir, filename), importdir)
+                shutil.move(os.path.join(rootdir, filename), os.path.join(importdir, filename))
         return None
 def main():
     check_dir()
