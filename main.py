@@ -3,13 +3,13 @@ import datetime, os
 import shutil
 import xml.etree.ElementTree as ET
 
-rootdir = r'X:/Intersnack'
-importdir = r'X:/Intersnack/import'
+rootdir = r'X:/'
+importdir = r'X:/import'
 
-modifiedDir = r'X:/Intersnack/modified'
-cancelledDir = r'X:/Intersnack/cancelled'
-acceptedDir = r'X:/Intersnack/BackupRAW'
-dailyBackupDir = 'X:/Intersnack/BackupRAW/' + str(datetime.date.today())
+modifiedDir = r'X:/modified'
+cancelledDir = r'X:/cancelled'
+acceptedDir = r'X:/BackupRAW'
+dailyBackupDir = 'X:/BackupRAW/' + str(datetime.date.today())
 
 def check_dir():
     directoryList = [importdir, modifiedDir, cancelledDir, acceptedDir, dailyBackupDir]
